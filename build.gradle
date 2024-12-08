@@ -1,3 +1,11 @@
+// Add the plugin repository
+pluginManagement {
+    repositories {
+        gradlePluginPortal()  // This will allow Gradle to search the Gradle Plugin Portal
+        mavenCentral()  // Add Maven Central as a fallback
+    }
+}
+
 plugins {
   // Include the Node.js plugin to execute Node.js and npm tasks
   id "org.gradle.nodejs" version "3.1.1"  // Updated to the latest stable version
