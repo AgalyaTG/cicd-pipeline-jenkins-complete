@@ -1,9 +1,7 @@
-// Add the plugin repository
-pluginManagement {
-    repositories {
-        gradlePluginPortal()  // This will allow Gradle to search the Gradle Plugin Portal
-        mavenCentral()  // Add Maven Central as a fallback
-    }
+// Add repositories to search for plugins
+repositories {
+    gradlePluginPortal()  // This will allow Gradle to search the Gradle Plugin Portal
+    mavenCentral()        // Add Maven Central as a fallback
 }
 
 plugins {
