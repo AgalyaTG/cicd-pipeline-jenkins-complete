@@ -1,35 +1,55 @@
 plugins {
-  //inlude the nodeJS plugin to execute nodejs and npm tasks
-  id "org.gradle.nodejs" version "1.2.0"
+  // Include the Node.js plugin to execute Node.js and npm tasks
+  id "org.gradle.nodejs" version "3.1.1"  // Updated to the latest stable version
 }
 
 node {
-	download = true
-	version = "9.11.1"
-	npmVersion = "5.6.0"
+  download = true  // Ensures that Node.js and npm are downloaded if not already available
+  version = "9.11.1"  // Use a Node.js version (you can change this if necessary)
+  npmVersion = "5.6.0"  // Use the npm version (change if needed)
 }
 
-//declare a build task
-task build
+// Define task to install npm dependencies
+task npmInstall(type: NpmTask) {
+  description = "Install npm dependencies"
+  group = "build"
+  args = ['install']  // Run 'npm install' to fetch dependencies
+}
 
-//declare a task to create a zip of the app
+// Define task to run npm tests
+task npm_test(type: NpmTask) {
+  description = "Run npm tests"
+  group = "verification"
+  dependsOn npmInstall  // Ensure npm install is done before testing
+  args = ['test']  // Run 'npm test' to execute tests
+}
+
+// Define task to build the npm project
+task npm_build(type: NpmTask) {
+  description = "Build the npm project"
+  group = "build"
+  dependsOn npm_test  // Ensure npm tests are passed before building
+  args = ['run', 'build']  // Run 'npm run build' to build the project
+}
+
+// Define a task to create a zip of the app
 task zip(type: Zip) {
-	from ('.') {
-		include "*"
-		include "bin/**"
-		include "data/**"
-		include "node_modules/**"
-		include "public/**"
-		include "routes/**"
-		include "views/**"
-	}
-	destinationDir(file("dist"))
-	baseName "trainSchedule"
+  from ('.') {
+    include "*"
+    include "bin/**"
+    include "data/**"
+    include "node_modules/**"
+    include "public/**"
+    include "routes/**"
+    include "views/**"
+  }
+  destinationDir(file("dist"))
+  baseName "trainSchedule"
 }
 
-//declare task dependencies
-build.dependsOn zip
-zip.dependsOn npm_build
-npm_build.dependsOn npm_test
-npm_test.dependsOn npmInstall
-npm_build.dependsOn npmInstall
+// Define a build task
+task build {
+  dependsOn zip  // Ensure zip task is run as part of the build
+}
+
+/
