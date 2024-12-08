@@ -52,4 +52,5 @@ task build {
   dependsOn zip  // Ensure zip task is run as part of the build
 }
 
-/
+// Task dependencies
+zip.dependsOn npm_build  // Ensure npm_build is done before zipping
